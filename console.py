@@ -104,7 +104,6 @@ class HBNBCommand(cmd.Cmd):
         """ Handles EOF to exit program """
         print()
         exit()
-
     def help_EOF(self):
         """ Prints the help documentation for EOF """
         print("Exits the program without formatting\n")
@@ -115,16 +114,35 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+        args_list = args.split()
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        class_name = args_list[0]
+        if args not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        if len(args_list)<2:
+            print("**parameters missing**")
+            return
+        params = args_list[1:]
+        processed_params = {}
+        for param in params:
+            key_value = param.split('=')
+            if len (key_value) != 2:
+                continue
+            key = key_value[0]
+            value = key_value[1]
+            value = self.check_value_type(value)
+            if value is None:
+                continue
+            else:
+                setattr(new_instance, key, value)
+
+
+        storage.new(new_instance)
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
