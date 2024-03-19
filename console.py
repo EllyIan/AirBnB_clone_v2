@@ -133,12 +133,25 @@ class HBNBCommand(cmd.Cmd):
                 continue
             key = key_value[0]
             value = key_value[1]
-            value = self.check_value_type(value)
-            if value is None:
-                continue
+            value = value.strip('"').replace("\\", "").replace("_", " ")  
+            if "." in value:
+                value = float(value)
             else:
-                setattr(new_instance, key, value)
+                try:
+                    value = int(value)
+                except ValueError:
+                    pass
+            processed_params[key] = value  
 
+        except ValueError as e:
+            print(f"Error: Invalid parameter: {e}")
+            continue
+        new_instance = self.class_to_model[class_name]()
+    for key, value in processed_params.items():
+        if hasattr(new_instance, key):
+            setattr(new_instance, key, value)
+        else:
+            print(f"Warning: Attribute '{key}' not found in class '{class_name}'")
 
         storage.new(new_instance)
         storage.save()
