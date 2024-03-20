@@ -23,16 +23,16 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
+        'BaseModel': BaseModel, 'User': User, 'Place': Place,
+        'State': State, 'City': City, 'Amenity': Amenity,
                'Review': Review
-              }
+    }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
-             'number_rooms': int, 'number_bathrooms': int,
-             'max_guest': int, 'price_by_night': int,
+        'number_rooms': int, 'number_bathrooms': int,
+        'max_guest': int, 'price_by_night': int,
              'latitude': float, 'longitude': float
-            }
+    }
 
     def preloop(self):
         """Prints if isatty is false"""
@@ -77,7 +77,11 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
+<<<<<<< HEAD
                     if pline[0] == '{' and pline[-1] == '}'\
+=======
+                    if pline[0] is '{' and pline[-1] is '}'\
+>>>>>>> 4ad11ec83a17c458138f70967024c101b448f1e1
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -107,7 +111,11 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, arg):
         """ Handles EOF to exit program """
         print()
+<<<<<<< HEAD
         exit(0)
+=======
+        exit()
+>>>>>>> 4ad11ec83a17c458138f70967024c101b448f1e1
 
     def help_EOF(self):
         """ Prints the help documentation for EOF """
@@ -119,6 +127,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+<<<<<<< HEAD
         ignored_attrs = ('id', 'created_at', 'updated_at', '__class__')
         class_name = ''
         name_pattern = r'(?P<name>(?:[a-zA-Z]|_)(?:[a-zA-Z]|\d|_)*)'
@@ -174,6 +183,32 @@ class HBNBCommand(cmd.Cmd):
                 if key not in ignored_attrs:
                     setattr(new_instance, key, value)
             new_instance.save()
+=======
+        arg = args.split()
+           if not args:
+                print("** class name missing **")
+                return
+            elif arg[0] not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
+
+            new_instance = eval(arg[0])()
+            print(arg[0])
+            arg.pop(0)
+            for item in arg:
+                item = item.split('=')
+                if len(item) != 2:
+                    continue
+                key = item[0]
+                value = item[1]
+                value = self.check_value_type(value)
+                if value is None:
+                    continue
+                else:
+                    setattr(new_instance, key, value)
+            storage.new(new_instance)
+            storage.save()
+>>>>>>> 4ad11ec83a17c458138f70967024c101b448f1e1
             print(new_instance.id)
 
     def help_create(self):
@@ -237,7 +272,11 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
+<<<<<<< HEAD
             storage.delete(storage.all()[key])
+=======
+            del (storage.all()[key])
+>>>>>>> 4ad11ec83a17c458138f70967024c101b448f1e1
             storage.save()
         except KeyError:
             print("** no instance found **")
