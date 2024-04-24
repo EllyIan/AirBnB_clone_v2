@@ -85,3 +85,9 @@ class FileStorage:
         elif cls is None:
             total = len(self.__objects)
         return total
+
+
+    def close(self):
+        """ calls reload()
+        """
+        self.reload()
